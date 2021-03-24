@@ -1,5 +1,9 @@
 <template>
   <div id="app">
+    <div class="w3-panel w3-red" :v-if="showAlert">
+      <h3>Error!</h3>
+      <p>{{alertMessage}}</p>
+    </div>
     <SmartHomePage />
   </div>
 </template>
@@ -11,6 +15,14 @@ export default {
   name: 'App',
   components: {
     SmartHomePage,
+  },
+  computed: {
+    showAlert() {
+      return this.$store.showAlert;
+    },
+    alertMessage() {
+      return this.$store.alertMessage;
+    },
   },
 };
 </script>
