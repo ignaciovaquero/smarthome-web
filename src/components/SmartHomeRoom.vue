@@ -1,5 +1,5 @@
 <template>
-  <div class="w3-container w3-content w3-card w3-round-large">
+  <div class="w3-container w3-content w3-card w3-round-large ">
     {{RoomName}}
   </div>
 </template>

@@ -7,8 +7,6 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     rooms: [],
-    alertMessage: '',
-    showAlert: false,
     // eslint-disable-next-line no-undef
     smartHomeBaseURL: config.SMARTHOME_BASE_URL,
     // eslint-disable-next-line no-undef
@@ -17,10 +15,6 @@ export default new Vuex.Store({
     smartHomeJWTToken: config.SMARTHOME_JWT_TOKEN,
   },
   mutations: {
-    displayAlert(state, message) {
-      state.showAlert = true;
-      state.alertMessage = message;
-    },
     updateRooms(state, rooms) {
       state.rooms = rooms;
     },
@@ -28,10 +22,9 @@ export default new Vuex.Store({
   actions: {
     getRooms({ commit, state }) {
       return axios.get(
-        state.smartHomeBaseURL,
+        `${state.smartHomeBaseURL}/all`,
         { headers: { 'x-api-key': state.smartHomeAPIKey, Authorization: `Bearer ${state.smartHomeJWTToken}` } },
-      ).then((response) => commit('updateRooms', response.data))
-        .catch((error) => commit('displayAlert', error));
+      ).then((response) => commit('updateRooms', response.data));
     },
   },
 });

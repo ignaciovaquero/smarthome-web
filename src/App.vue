@@ -1,10 +1,10 @@
 <template>
   <div id="app">
-    <div class="w3-panel w3-red" :v-if="showAlert">
+    <div class="w3-panel w3-red header" v-if="alertMessage.length > 0">
       <h3>Error!</h3>
       <p>{{alertMessage}}</p>
     </div>
-    <SmartHomePage />
+    <SmartHomePage v-if="alertMessage.length == 0" />
   </div>
 </template>
 
@@ -16,13 +16,16 @@ export default {
   components: {
     SmartHomePage,
   },
-  computed: {
-    showAlert() {
-      return this.$store.showAlert;
-    },
-    alertMessage() {
-      return this.$store.alertMessage;
-    },
+  data() {
+    return {
+      alertMessage: '',
+    };
+  },
+  created() {
+    this.$store.dispatch('getRooms').catch((error) => {
+      this.alertMessage = error;
+      this.showAlert = true;
+    });
   },
 };
 </script>
@@ -34,6 +37,10 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+
+.header {
+  position: relative;
+  margin: 0px;
 }
 </style>

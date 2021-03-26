@@ -4,24 +4,53 @@
       <img class="logo" src="../assets/smarthome-logo.png" />
       <span class="w3-xxxlarge">SmartHome</span>
     </div>
-    <SmartHomeRoom :RoomName="rooms" />
+    <SmartHomeRoom v-if="selectedRoom" :RoomName="selectedRoom.room.Value" />
   </div>
 </template>
 
 <script>
 import SmartHomeRoom from './SmartHomeRoom.vue';
 
+function getPreviousValidIndex(index, length) {
+  const deprecatedIndex = index - 1;
+  return deprecatedIndex < 0 ? length - 1 : deprecatedIndex;
+}
+
+function getNextValidIndex(index, length) {
+  const incrementedIndex = index + 1;
+  return incrementedIndex > length - 1 ? 0 : incrementedIndex;
+}
+
 export default {
   name: 'SmartHomePage',
   components: {
     SmartHomeRoom,
   },
-  created() {
-    this.$store.dispatch('getRooms');
+  data() {
+    return {
+      selectedRoomIndex: 0,
+    };
   },
   computed: {
     rooms() {
       return this.$store.state.rooms;
+    },
+    selectedRoom() {
+      return this.rooms[this.selectedRoomIndex];
+    },
+  },
+  methods: {
+    selectNextRoom() {
+      this.selectedRoomIndex = getNextValidIndex(
+        this.selectedRoomIndex,
+        this.rooms.length,
+      );
+    },
+    selectPreviousRoom() {
+      this.selectedRoomIndex = getPreviousValidIndex(
+        this.selectedRoomIndex,
+        this.rooms.length,
+      );
     },
   },
 };
