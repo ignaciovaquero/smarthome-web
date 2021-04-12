@@ -1,10 +1,16 @@
 <template>
   <div>
-    <div class="w3-container">
+    <div class="w3-container title">
       <img class="logo" src="../assets/smarthome-logo.png" />
       <span class="w3-xxxlarge">SmartHome</span>
     </div>
-    <SmartHomeRoom v-if="selectedRoom" :RoomName="selectedRoom.room.Value" />
+    <SmartHomeRoom
+      v-if="selectedRoom"
+      :roomName="selectedRoom.room.Value"
+      :maxThreshold="selectedRoom.threshold_off.Value"
+      :minThreshold="selectedRoom.threshold_on.Value"
+      :enabled="selectedRoom.enabled.Value"
+    />
   </div>
 </template>
 
@@ -57,13 +63,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.logo {
-  width: 100px;
-  position: relative;
-  left: 0px;
-}
+  .title {
+    position: relative;
+    top: 30px;
+  }
 
-h1 {
-  position: relative;
-}
+  .logo {
+    width: 100px;
+    position: relative;
+    left: 0px;
+  }
+
+  h1 {
+    position: relative;
+  }
 </style>
