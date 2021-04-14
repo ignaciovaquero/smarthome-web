@@ -1,6 +1,6 @@
 <template>
   <div>
-    <span class="previous" />
+    <span class="previous w3-card-4" />
     <div class="w3-container w3-content w3-card w3-round-large room-container">
       <div class="w3-xxlarge w3-padding-large">
         {{roomName}}
@@ -80,15 +80,17 @@ export default {
     display: inline-block;
     width: 50px;
     height: 50px;
-    background-color: #2196F3;
+    background-color: #ffffff;
     border-radius: 50px;
   }
 
   .previous::before {
     content: "<";
     position: relative;
-    color: #ffffff;
+    color: #313131;
     font-size: 20px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
     top: 11px;
   }
 
