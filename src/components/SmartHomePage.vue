@@ -4,17 +4,21 @@
       <img class="logo" src="../assets/smarthome-logo.png" />
       <span class="w3-xxxlarge">SmartHome</span>
     </div>
-    <SmartHomeRoom
-      v-if="selectedRoom"
-      :roomName="selectedRoom.room.Value"
-      :maxThreshold="selectedRoom.threshold_off.Value"
-      :minThreshold="selectedRoom.threshold_on.Value"
-      :enabled="selectedRoom.enabled.Value"
-    />
+    <carousel class="carousel" v-if="rooms.length" :perPage="1">
+      <slide class="slide" v-for="(room, index) in rooms" :key="index">
+        <SmartHomeRoom
+          :roomName="room.room.Value"
+          :maxThreshold="parseFloat(room.threshold_off.Value)"
+          :minThreshold="parseFloat(room.threshold_on.Value)"
+          :enabled="room.enabled.Value"
+        />
+      </slide>
+    </carousel>
   </div>
 </template>
 
 <script>
+import { Carousel, Slide } from 'vue-carousel';
 import SmartHomeRoom from './SmartHomeRoom.vue';
 
 function getPreviousValidIndex(index, length) {
@@ -31,6 +35,8 @@ export default {
   name: 'SmartHomePage',
   components: {
     SmartHomeRoom,
+    Carousel,
+    Slide,
   },
   data() {
     return {
@@ -66,6 +72,16 @@ export default {
   .title {
     position: relative;
     top: 30px;
+  }
+
+  .carousel {
+    top: 80px;
+  }
+
+  .slide {
+    position: relative;
+    min-height: 410px;
+    top: 5px;
   }
 
   .logo {
