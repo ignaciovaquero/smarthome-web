@@ -18,6 +18,9 @@ export default new Vuex.Store({
     updateRooms(state, rooms) {
       state.rooms = rooms;
     },
+    updateSingleRoom(state, room) {
+      state.rooms.map((r) => (r.room.Value === room.room.Value ? room : r));
+    },
   },
   actions: {
     getRooms({ commit, state }) {
@@ -25,6 +28,22 @@ export default new Vuex.Store({
         `${state.smartHomeBaseURL}/all`,
         { headers: { 'x-api-key': state.smartHomeAPIKey, Authorization: `Bearer ${state.smartHomeJWTToken}` } },
       ).then((response) => commit('updateRooms', response.data));
+    },
+    updateRoom({ commit, state }, roomValues) {
+      const { name, ...roomData } = roomValues;
+      console.log(roomData);
+      axios.post(
+        `${state.smartHomeBaseURL}/${name}`,
+        roomData,
+        {
+          headers: { 'x-api-key': state.smartHomeAPIKey, Authorization: `Bearer ${state.smartHomeJWTToken}` },
+        },
+      ).then(() => commit('updateSingleRoom', {
+        enabled: { Value: roomData.enabled },
+        room: { Value: name },
+        threshold_on: { Value: roomData.threshold_on },
+        threshold_off: { Value: roomData.threshold_off },
+      }));
     },
   },
 });

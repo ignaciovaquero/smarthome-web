@@ -21,16 +21,6 @@
 import { Carousel, Slide } from 'vue-carousel';
 import SmartHomeRoom from './SmartHomeRoom.vue';
 
-function getPreviousValidIndex(index, length) {
-  const deprecatedIndex = index - 1;
-  return deprecatedIndex < 0 ? length - 1 : deprecatedIndex;
-}
-
-function getNextValidIndex(index, length) {
-  const incrementedIndex = index + 1;
-  return incrementedIndex > length - 1 ? 0 : incrementedIndex;
-}
-
 export default {
   name: 'SmartHomePage',
   components: {
@@ -46,23 +36,6 @@ export default {
   computed: {
     rooms() {
       return this.$store.state.rooms;
-    },
-    selectedRoom() {
-      return this.rooms[this.selectedRoomIndex];
-    },
-  },
-  methods: {
-    selectNextRoom() {
-      this.selectedRoomIndex = getNextValidIndex(
-        this.selectedRoomIndex,
-        this.rooms.length,
-      );
-    },
-    selectPreviousRoom() {
-      this.selectedRoomIndex = getPreviousValidIndex(
-        this.selectedRoomIndex,
-        this.rooms.length,
-      );
     },
   },
 };

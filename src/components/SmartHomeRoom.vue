@@ -9,7 +9,7 @@
         <div>
           <input
             type="text"
-            v-model="maxThreshold"
+            v-model="roomMaxThreshold"
             class="w3-center w3-input w3-padding-large temperature"
           />
         </div>
@@ -19,7 +19,7 @@
         <div>
           <input
             type="text"
-            v-model="minThreshold"
+            v-model="roomMinThreshold"
             class="w3-center w3-input w3-padding-large temperature"
           />
         </div>
@@ -28,7 +28,7 @@
         Enabled
       </div>
       <label class="switch">
-        <input type="checkbox" v-model="enabled">
+        <input type="checkbox" v-model="roomEnabled">
         <span class="slider round"></span>
       </label>
     </div>
@@ -36,8 +36,21 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
   name: 'SmartHomeRoom',
+  updated() {
+    this.updateRoom({
+      name: this.roomName,
+      threshold_on: this.roomMinThreshold,
+      threshold_off: this.roomMaxThreshold,
+      enabled: this.roomEnabled,
+    });
+  },
+  methods: {
+    ...mapActions(['updateRoom']),
+  },
   props: {
     roomName: {
       type: String,
@@ -56,13 +69,20 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      roomEnabled: this.enabled,
+      roomMaxThreshold: this.maxThreshold,
+      roomMinThreshold: this.minThreshold,
+    };
+  },
 };
 </script>
 
 <style lang="scss" scoped>
   .room-container {
     position: relative;
-    min-height: 400px;
+    height: 400px;
     max-width: 400px;
   }
 
