@@ -4,16 +4,18 @@
       <img class="logo" src="../assets/smarthome-logo.png" />
       <span class="w3-xxxlarge">SmartHome</span>
     </div>
-    <carousel class="carousel" v-if="rooms.length" :perPage="1">
-      <slide class="slide" v-for="(room, index) in rooms" :key="index">
-        <SmartHomeRoom
-          :roomName="room.room.Value"
-          :maxThreshold="parseFloat(room.threshold_off.Value)"
-          :minThreshold="parseFloat(room.threshold_on.Value)"
-          :enabled="room.enabled.Value"
-        />
-      </slide>
-    </carousel>
+    <div class="w3-content carousel-container">
+      <carousel class="carousel" v-if="rooms.length" :perPage="1">
+        <slide class="slide" v-for="(room, index) in rooms" :key="index">
+          <SmartHomeRoom
+            :roomName="room.room.Value"
+            :maxThreshold="parseFloat(room.threshold_off.Value)"
+            :minThreshold="parseFloat(room.threshold_on.Value)"
+            :enabled="room.enabled.Value"
+          />
+        </slide>
+      </carousel>
+    </div>
   </div>
 </template>
 
@@ -45,6 +47,10 @@ export default {
   .title {
     position: relative;
     top: 30px;
+  }
+
+  .carousel-container {
+    max-width: 600px;
   }
 
   .carousel {

@@ -2,7 +2,7 @@
   <div>
     <div class="w3-container w3-content w3-card w3-round-large room-container">
       <div class="w3-xxlarge w3-padding-large">
-        {{roomName}}
+        {{localeRoomName}}
       </div>
       <div class="w3-large w3-padding-large">
         Max. Threshold
@@ -37,6 +37,7 @@
 
 <script>
 import { mapActions } from 'vuex';
+import locales from '../locales/index';
 
 export default {
   name: 'SmartHomeRoom',
@@ -67,6 +68,11 @@ export default {
     enabled: {
       type: Boolean,
       required: true,
+    },
+  },
+  computed: {
+    localeRoomName() {
+      return locales[this.roomName];
     },
   },
   data() {
