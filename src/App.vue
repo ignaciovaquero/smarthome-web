@@ -1,32 +1,12 @@
 <template>
   <div id="app">
-    <div class="w3-panel w3-red header" v-if="alertMessage.length > 0">
-      <h3>Error!</h3>
-      <p>{{alertMessage}}</p>
-    </div>
-    <SmartHomePage v-if="alertMessage.length == 0" />
+    <router-view />
   </div>
 </template>
 
 <script>
-import SmartHomePage from './components/SmartHomePage.vue';
-
 export default {
   name: 'App',
-  components: {
-    SmartHomePage,
-  },
-  data() {
-    return {
-      alertMessage: '',
-    };
-  },
-  created() {
-    this.$store.dispatch('getRooms').catch((error) => {
-      this.alertMessage = error;
-      this.showAlert = true;
-    });
-  },
 };
 </script>
 

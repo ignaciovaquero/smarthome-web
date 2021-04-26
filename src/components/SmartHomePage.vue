@@ -44,32 +44,32 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .title {
-    position: relative;
-    top: 30px;
-  }
+.title {
+  position: relative;
+  top: 30px;
+}
 
-  .carousel-container {
-    max-width: 600px;
-  }
+.carousel-container {
+  max-width: 600px;
+}
 
-  .carousel {
-    top: 80px;
-  }
+.carousel {
+  top: 80px;
+}
 
-  .slide {
-    position: relative;
-    min-height: 410px;
-    top: 5px;
-  }
+.slide {
+  position: relative;
+  min-height: 410px;
+  top: 5px;
+}
 
-  .logo {
-    width: 100px;
-    position: relative;
-    left: 0px;
-  }
+.logo {
+  width: 100px;
+  position: relative;
+  left: 0px;
+}
 
-  h1 {
-    position: relative;
-  }
+h1 {
+  position: relative;
+}
 </style>
