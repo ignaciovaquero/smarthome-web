@@ -26,16 +26,13 @@ export default new Vuex.Store({
   },
   actions: {
     login({ commit, state }, { username, password }) {
-      axios.post(
+      commit('setToken', '');
+      return axios.post(
         `${state.smartHomeBaseURL}/login`,
         { username, password },
         { headers: { 'x-api-key': state.smartHomeAPIKey } },
       ).then((response) => {
-        if (response.status === 200) {
-          commit('setToken', response.data.token);
-        } else {
-          commit('setToken', '');
-        }
+        commit('setToken', response.data.token);
       });
     },
     getRooms({ commit, state }) {

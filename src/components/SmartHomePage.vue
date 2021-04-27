@@ -30,6 +30,13 @@ export default {
     Carousel,
     Slide,
   },
+  created() {
+    if (this.$store.state.smartHomeToken === '') {
+      this.$router.push({ name: 'Login' });
+      return;
+    }
+    this.$store.dispatch('getRooms');
+  },
   data() {
     return {
       selectedRoomIndex: 0,
