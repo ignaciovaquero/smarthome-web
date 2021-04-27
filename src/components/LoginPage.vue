@@ -1,6 +1,6 @@
 <template>
   <div class="w3-content w3-card login-form">
-    <h1 class="title">{{title}}</h1>
+    <h1 class="title w3-padding-large">{{title}}</h1>
     <form class="w3-container">
       <input
         class="input-username w3-input"
@@ -17,7 +17,7 @@
       <button
         type="button"
         class="login-button w3-button w3-hover-shadow"
-        @click="setUserAndPass()"
+        @click="login()"
       >
         Login
       </button>
@@ -40,14 +40,10 @@ export default {
     };
   },
   methods: {
-    setUserAndPass() {
-      this.$store.commit('setUser', this.user);
-      this.$store.commit('setPass', this.pass);
-      this.$store.dispatch('getWorlds')
-        .then(() => this.$router.push({ name: 'Home' }))
-        .catch((error) => {
-          this.$fire({ title: error.response.data.message, type: 'error' });
-        });
+    login() {
+      this.$store.dispatch('login', { username: this.user, password: this.pass })
+        .then(() => this.$router.push({ name: 'SmartHome' }))
+        .catch((error) => console.log(error.response.data.message));
     },
   },
 };
