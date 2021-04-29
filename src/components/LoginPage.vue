@@ -1,27 +1,32 @@
 <template>
-  <div class="w3-content w3-card login-form">
-    <h1 class="title w3-padding-large">{{title}}</h1>
-    <form class="w3-container">
-      <input
-        class="input-username w3-input"
-        type="text"
-        placeholder="username"
-        v-model="user"
-      />
-      <input
-        class="input-password w3-input"
-        type="password"
-        placeholder="password"
-        v-model="pass"
-      />
-      <button
-        type="button"
-        class="login-button w3-button w3-hover-shadow"
-        @click="login()"
-      >
-        Login
-      </button>
-    </form>
+  <div>
+    <div class="w3-panel w3-red w3-animate-top" v-if="showErrorPanel">
+      <p>{{loginErrorMessage}}</p>
+    </div>
+    <div class="w3-content w3-card login-form">
+      <h1 class="title w3-padding-large">{{title}}</h1>
+      <form class="w3-container">
+        <input
+          class="input-username w3-input"
+          type="text"
+          placeholder="username"
+          v-model="user"
+        />
+        <input
+          class="input-password w3-input"
+          type="password"
+          placeholder="password"
+          v-model="pass"
+        />
+        <button
+          type="button"
+          class="login-button w3-button w3-hover-shadow"
+          @click="login()"
+        >
+          Login
+        </button>
+      </form>
+   </div>
   </div>
 </template>
 
@@ -37,13 +42,19 @@ export default {
     return {
       user: '',
       pass: '',
+      loginErrorMessage: 'Error',
+      showErrorPanel: false,
     };
   },
   methods: {
     login() {
       this.$store.dispatch('login', { username: this.user, password: this.pass })
         .then(() => this.$router.push({ name: 'SmartHome' }))
-        .catch((error) => console.log(error.response.data.message));
+        .catch((error) => {
+          this.loginErrorMessage = error.response.data.message;
+          this.showErrorPanel = true;
+          setTimeout(() => { this.showErrorPanel = false; }, 2000);
+        });
     },
   },
 };

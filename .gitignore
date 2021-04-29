@@ -21,3 +21,7 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+# Terraform secrets and local files
+terraform/secrets.auto.tfvars
+terraform/.terraform
