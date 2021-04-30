@@ -25,3 +25,4 @@ pnpm-debug.log*
 # Terraform secrets and local files
 terraform/secrets.auto.tfvars
 terraform/.terraform
+terraform/.terraform.lock.hcl

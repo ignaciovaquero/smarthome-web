@@ -1,7 +1,3 @@
-variable "region" {
-  default = "eu-west-3"
-}
-
 variable "secret_key" {}
 
 variable "access_key" {}
