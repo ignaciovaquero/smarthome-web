@@ -28,8 +28,6 @@ provider "aws" {
 }
 
 locals {
-  domain_name = "ivaquero.es"
-  subdomain   = "smarthome"
   mime_types = {
     htm   = "text/html"
     html  = "text/html"
@@ -46,7 +44,7 @@ locals {
 module "cdn" {
   source = "terraform-aws-modules/cloudfront/aws"
 
-  aliases = ["${local.subdomain}.${local.domain_name}"]
+  aliases = ["${var.domain.subdomain}.${var.domain.name}"]
 
   comment             = "SmartHome Web App"
   enabled             = true
@@ -54,15 +52,11 @@ module "cdn" {
   price_class         = "PriceClass_100"
 
   create_origin_access_identity = true
+
+  default_root_object = "index.html"
   origin_access_identities = {
     s3_bucket_one = "only SmartHome Web App can access"
   }
-
-  logging_config = {
-    bucket = module.log_bucket.s3_bucket_bucket_domain_name
-    prefix = "cloudfront"
-  }
-
   origin = {
     s3_one = {
       domain_name = module.s3_one.s3_bucket_bucket_regional_domain_name
@@ -110,16 +104,16 @@ module "cdn" {
 ######
 
 data "aws_route53_zone" "this" {
-  name = local.domain_name
+  name = var.domain.name
 }
 
 module "acm" {
   source  = "terraform-aws-modules/acm/aws"
   version = "~> 3.0"
 
-  domain_name               = "${local.subdomain}.${local.domain_name}"
+  domain_name               = "${var.domain.subdomain}.${var.domain.name}"
   zone_id                   = data.aws_route53_zone.this.id
-  subject_alternative_names = ["${local.subdomain}.${local.domain_name}"]
+  subject_alternative_names = ["${var.domain.subdomain}.${var.domain.name}"]
 }
 
 #############
@@ -132,27 +126,7 @@ module "s3_one" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "~> 2.0"
 
-  bucket        = var.bucket["name"]
-  force_destroy = true
-}
-
-module "log_bucket" {
-  source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "~> 2.0"
-
-  bucket = "logs-${random_pet.this.id}"
-  acl    = null
-  grant = [{
-    type        = "CanonicalUser"
-    permissions = ["FULL_CONTROL"]
-    id          = data.aws_canonical_user_id.current.id
-    }, {
-    type        = "CanonicalUser"
-    permissions = ["FULL_CONTROL"]
-    id          = "c4c1ede66af53448b93c283ce9448c4ba468c9432aa01d700d3878632f77d2d0"
-    # Ref. https://github.com/terraform-providers/terraform-provider-aws/issues/12512
-    # Ref. https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/AccessLogs.html
-  }]
+  bucket        = var.bucket_name
   force_destroy = true
 }
 
@@ -168,7 +142,7 @@ module "records" {
 
   records = [
     {
-      name = local.subdomain
+      name = var.domain.subdomain
       type = "A"
       alias = {
         name    = module.cdn.cloudfront_distribution_domain_name
@@ -212,7 +186,6 @@ resource "aws_s3_bucket_object" "smarthome_content" {
   bucket = module.s3_one.s3_bucket_id
   key = replace(each.value, var.upload_directory, "")
   source = "${var.upload_directory}${each.value}"
-  acl = "public-read"
   etag = filemd5("${var.upload_directory}${each.value}")
   content_type = lookup(local.mime_types, split(".", each.value)[length(split(".", each.value)) - 1])
 }

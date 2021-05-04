@@ -1,14 +1,29 @@
-variable "secret_key" {}
+variable "secret_key" {
+  type = string
+}
 
-variable "access_key" {}
+variable "access_key" {
+  type = string
+}
 
-variable "bucket" {
+variable "bucket_name" {
+  type = string
+  default = "igvaquero-smarthome-web-content"
+}
+
+variable "domain" {
+  type = object({
+    name = string
+    subdomain = string
+  })
+
   default = {
-    name = "igvaquero-smarthome-web-content"
-    coldbeer_key = "coldbeer"
+    name = "ivaquero.es"
+    subdomain = "smarthome"
   }
 }
 
 variable "upload_directory" {
+  type = string
   default = "../dist/"
 }
