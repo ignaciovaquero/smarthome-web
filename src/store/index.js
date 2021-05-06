@@ -10,8 +10,6 @@ export default new Vuex.Store({
     smartHomeToken: '',
     // eslint-disable-next-line no-undef
     smartHomeBaseURL: config.SMARTHOME_BASE_URL,
-    // eslint-disable-next-line no-undef
-    smartHomeAPIKey: config.SMARTHOME_API_KEY,
   },
   mutations: {
     setToken(state, token) {
@@ -30,7 +28,6 @@ export default new Vuex.Store({
       return axios.post(
         `${state.smartHomeBaseURL}/login`,
         { username, password },
-        { headers: { 'x-api-key': state.smartHomeAPIKey } },
       ).then((response) => {
         commit('setToken', response.data.token);
       });
@@ -38,17 +35,17 @@ export default new Vuex.Store({
     getRooms({ commit, state }) {
       return axios.get(
         `${state.smartHomeBaseURL}/room/all`,
-        { headers: { 'x-api-key': state.smartHomeAPIKey, Authorization: `Bearer ${state.smartHomeToken}` } },
+        { headers: { Authorization: `Bearer ${state.smartHomeToken}` } },
       ).then((response) => commit('updateRooms', response.data));
     },
     updateRoom({ commit, state }, roomValues) {
       const { name, ...roomData } = roomValues;
       console.log(roomData);
-      axios.post(
+      return axios.post(
         `${state.smartHomeBaseURL}/room/${name}`,
         roomData,
         {
-          headers: { 'x-api-key': state.smartHomeAPIKey, Authorization: `Bearer ${state.smartHomeToken}` },
+          headers: { Authorization: `Bearer ${state.smartHomeToken}` },
         },
       ).then(() => commit('updateSingleRoom', {
         enabled: { Value: roomData.enabled },

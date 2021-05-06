@@ -47,7 +47,7 @@ export default {
       threshold_on: this.roomMinThreshold,
       threshold_off: this.roomMaxThreshold,
       enabled: this.roomEnabled,
-    });
+    }).catch(() => this.$router.push({ name: 'Login' }));
   },
   methods: {
     ...mapActions(['updateRoom']),
