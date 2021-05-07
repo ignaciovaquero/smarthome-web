@@ -3,6 +3,7 @@
 SMARTHOME_BASE_URL ?= https://yqzj7ilmwg.execute-api.eu-west-3.amazonaws.com/dev
 
 build:
+	npm install
 	npm run build
 
 clean:
