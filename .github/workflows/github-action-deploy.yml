@@ -1,0 +1,31 @@
+name: Deploy SmartHome web
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "15"
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 0.15.2
+      - name: NPM install
+        run: npm install
+      - name: NPM build
+        run: npm run build
+      - name: Replace SMARTHOME_BASE_URL
+        run: "sed -i -e \"s#SMARTHOME_BASE_URL: '.*'#SMARTHOME_BASE_URL: 'https://yqzj7ilmwg.execute-api.eu-west-3.amazonaws.com/dev'#g\" dist/config.js"
+      - name: Apply Terraform
+        run: terraform -chdir=terraform apply -var secret_key="${AWS_SECRET_KEY}" -auto-approve
+        env:
+          AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
