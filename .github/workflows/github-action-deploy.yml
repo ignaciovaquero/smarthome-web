@@ -20,12 +20,8 @@ jobs:
           terraform_version: 0.15.2
       - name: Install NPM dependencies
         run: npm ci
-      - name: Get a list of directories
-        run: ls -ltr
-      - name: See if directory exists
-        run: ls -ltr /home/runner/work/smarthome-web/smarthome-web/node_modules/
-      - name: See if directory exists
-        run: ls -ltr /home/runner/work/smarthome-web/smarthome-web/node_modules/node-sass
+      - name: Rebuild node sass
+        run: npm rebuild node-sass
       - name: Build the project
         run: npm run build
       - name: Replace SMARTHOME_BASE_URL
