@@ -29,6 +29,4 @@ jobs:
       - name: Init Terraform
         run: terraform -chdir=terraform init -backend-config="access_key=AKIARRPNAYUPDAUQOEMK" -backend-config="secret_key=${{ secrets.AWS_SECRET_KEY }}"
       - name: Apply Terraform
-        run: terraform -chdir=terraform apply -var secret_key="${AWS_SECRET_KEY}" -auto-approve
-        env:
-          AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+        run: terraform -chdir=terraform apply -var secret_key="${{ secrets.AWS_SECRET_KEY }}" -auto-approve
