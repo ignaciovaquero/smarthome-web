@@ -1,0 +1,28 @@
+name: Deploy SmartHome web
+on: [pull_request]
+jobs:
+  build-and-plan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "15"
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 0.15.2
+      - name: Install NPM dependencies
+        run: npm ci
+      - name: Rebuild node sass
+        run: npm rebuild node-sass
+      - name: Build the project
+        run: npm run build
+      - name: Replace SMARTHOME_BASE_URL
+        run: "sed -i -e \"s#SMARTHOME_BASE_URL: '.*'#SMARTHOME_BASE_URL: 'https://yqzj7ilmwg.execute-api.eu-west-3.amazonaws.com/dev'#g\" dist/config.js"
+      - name: Init Terraform
+        run: terraform -chdir=terraform init -backend-config="access_key=AKIARRPNAYUPDAUQOEMK" -backend-config="secret_key=${{ secrets.AWS_SECRET_KEY }}"
+      - name: Plan Terraform
+        run: terraform -chdir=terraform plan -var secret_key="${{ secrets.AWS_SECRET_KEY }}"
