@@ -19,7 +19,7 @@
           v-model="pass"
         />
         <button
-          type="button"
+          type="submit"
           class="login-button w3-button w3-hover-shadow"
           @click="login()"
         >
@@ -76,7 +76,7 @@ input {
   display: block;
   margin: 30px 0px;
   border: 1px solid #cccccc;
-  border-radius: 30px;
+  border-radius: 15px;
 }
 
 input:focus {
