@@ -1,4 +1,4 @@
-.PHONY: build clean init deploy remove plan
+.PHONY: build clean init deploy remove plan dev
 
 SMARTHOME_BASE_URL ?= https://yqzj7ilmwg.execute-api.eu-west-3.amazonaws.com/dev
 
@@ -21,3 +21,6 @@ remove: init
 
 plan: init
 	terraform -chdir=terraform plan
+
+dev:
+	npm run serve

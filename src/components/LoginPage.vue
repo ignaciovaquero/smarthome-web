@@ -19,7 +19,7 @@
           v-model="pass"
         />
         <button
-          type="button"
+          type="submit"
           class="login-button w3-button w3-hover-shadow"
           @click="login()"
         >
