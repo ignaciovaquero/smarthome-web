@@ -76,7 +76,7 @@ input {
   display: block;
   margin: 30px 0px;
   border: 1px solid #cccccc;
-  border-radius: 30px;
+  border-radius: 15px;
 }
 
 input:focus {
