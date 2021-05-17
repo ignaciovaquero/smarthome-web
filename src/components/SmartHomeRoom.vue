@@ -10,7 +10,7 @@
           <input
             type="text"
             v-model="roomMaxThreshold"
-            class="w3-center w3-input w3-padding-large temperature"
+            :class="['w3-center', 'w3-input', 'w3-padding-large', 'temperature']"
           />
         </div>
       </div>
@@ -20,7 +20,7 @@
           <input
             type="text"
             v-model="roomMinThreshold"
-            class="w3-center w3-input w3-padding-large temperature"
+            :class="['w3-center', 'w3-input', 'w3-padding-large', 'temperature']"
           />
         </div>
       </div>
@@ -42,12 +42,23 @@ import locales from '../locales/index';
 export default {
   name: 'SmartHomeRoom',
   updated() {
+    const min = parseFloat(this.roomMinThreshold);
+    const max = parseFloat(this.roomMaxThreshold);
+
+    if (Number.isNaN(min) || Number.isNaN(max)) {
+      return;
+    }
     this.updateRoom({
       name: this.roomName,
-      threshold_on: this.roomMinThreshold,
-      threshold_off: this.roomMaxThreshold,
+      threshold_on: min,
+      threshold_off: max,
       enabled: this.roomEnabled,
-    }).catch(() => this.$router.push({ name: 'Login' }));
+    }).catch((error) => {
+      if (error.response !== undefined && error.response.status === 401) {
+        this.$store.commit('setToken', '');
+        this.$router.push({ name: 'Login' });
+      }
+    });
   },
   methods: {
     ...mapActions(['updateRoom']),

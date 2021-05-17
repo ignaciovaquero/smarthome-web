@@ -40,7 +40,6 @@ export default new Vuex.Store({
     },
     updateRoom({ commit, state }, roomValues) {
       const { name, ...roomData } = roomValues;
-      console.log(roomData);
       return axios.post(
         `${state.smartHomeBaseURL}/room/${name}`,
         roomData,
