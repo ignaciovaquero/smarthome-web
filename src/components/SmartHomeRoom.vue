@@ -11,6 +11,7 @@
             type="text"
             v-model="roomMaxThreshold"
             :class="['w3-center', 'w3-input', 'w3-padding-large', 'temperature']"
+            @blur="sendRoomParameters()"
           />
         </div>
       </div>
@@ -62,6 +63,14 @@ export default {
   },
   methods: {
     ...mapActions(['updateRoom']),
+    sendRoomParameters() {
+      this.updateRoom({
+        name: this.roomName,
+        threshold_on: this.roomMinThreshold,
+        threshold_off: this.roomMaxThreshold,
+        enabled: this.roomEnabled,
+      }).catch(() => this.$router.push({ name: 'Login' }));
+    },
   },
   props: {
     roomName: {
