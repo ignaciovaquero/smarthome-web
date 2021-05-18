@@ -9,8 +9,8 @@
         <slide class="slide" v-for="(room, index) in rooms" :key="index">
           <SmartHomeRoom
             :roomName="room.room.Value"
-            :maxThreshold="parseFloat(room.threshold_off.Value)"
-            :minThreshold="parseFloat(room.threshold_on.Value)"
+            :maxThreshold="room.threshold_off.Value"
+            :minThreshold="room.threshold_on.Value"
             :enabled="room.enabled.Value"
           />
         </slide>

@@ -51,7 +51,11 @@ export default {
       this.$store.dispatch('login', { username: this.user, password: this.pass })
         .then(() => this.$router.push({ name: 'SmartHome' }))
         .catch((error) => {
-          this.loginErrorMessage = error.response.data.message;
+          if (error.response.data === undefined) {
+            this.loginErrorMessage = error.response.status;
+          } else {
+            this.loginErrorMessage = error.response.data.message;
+          }
           this.showErrorPanel = true;
           setTimeout(() => { this.showErrorPanel = false; }, 2000);
         });

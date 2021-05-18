@@ -4,13 +4,17 @@
       <div class="w3-xxlarge w3-padding-large">
         {{localeRoomName}}
       </div>
+      <div v-if="wrongThresholds" class="w3-small thresholds-wrong">
+        Max. Threshold should be greater or equal than Min. Threshold
+      </div>
       <div class="w3-large w3-padding-large">
         Max. Threshold
         <div>
           <input
             type="text"
             v-model="roomMaxThreshold"
-            :class="['w3-center', 'w3-input', 'w3-padding-large', 'temperature']"
+            :class="['w3-center', 'w3-input', 'w3-padding-large', 'temperature', wrongMaxThreshold]"
+            @blur="sendRoomParameters()"
           />
         </div>
       </div>
@@ -20,7 +24,8 @@
           <input
             type="text"
             v-model="roomMinThreshold"
-            :class="['w3-center', 'w3-input', 'w3-padding-large', 'temperature']"
+            :class="['w3-center', 'w3-input', 'w3-padding-large', 'temperature', wrongMinThreshold]"
+            @blur="sendRoomParameters()"
           />
         </div>
       </div>
@@ -28,7 +33,7 @@
         Enabled
       </div>
       <label class="switch">
-        <input type="checkbox" v-model="roomEnabled">
+        <input type="checkbox" v-model="roomEnabled" @change="sendRoomParameters()">
         <span class="slider round"></span>
       </label>
     </div>
@@ -39,29 +44,57 @@
 import { mapActions } from 'vuex';
 import locales from '../locales/index';
 
+const wrongTemperature = 'temperature-wrong';
+
 export default {
   name: 'SmartHomeRoom',
-  updated() {
-    const min = parseFloat(this.roomMinThreshold);
-    const max = parseFloat(this.roomMaxThreshold);
-
-    if (Number.isNaN(min) || Number.isNaN(max)) {
-      return;
-    }
-    this.updateRoom({
-      name: this.roomName,
-      threshold_on: min,
-      threshold_off: max,
-      enabled: this.roomEnabled,
-    }).catch((error) => {
-      if (error.response !== undefined && error.response.status === 401) {
-        this.$store.commit('setToken', '');
-        this.$router.push({ name: 'Login' });
-      }
-    });
-  },
   methods: {
     ...mapActions(['updateRoom']),
+    sendRoomParameters() {
+      this.roomMinThreshold = this.roomMinThreshold.replaceAll(',', '.');
+      this.roomMaxThreshold = this.roomMaxThreshold.replaceAll(',', '.');
+
+      const min = parseFloat(this.roomMinThreshold);
+      const max = parseFloat(this.roomMaxThreshold);
+
+      let mustReturn = false;
+
+      if (Number.isNaN(min)) {
+        mustReturn = true;
+        this.wrongMinThreshold = wrongTemperature;
+      }
+
+      if (Number.isNaN(max)) {
+        mustReturn = true;
+        this.wrongMaxThreshold = wrongTemperature;
+      }
+
+      if (this.roomMaxThreshold < this.roomMinThreshold) {
+        mustReturn = true;
+        this.wrongMaxThreshold = wrongTemperature;
+        this.wrongMinThreshold = wrongTemperature;
+        this.wrongThresholds = true;
+      }
+
+      if (mustReturn) {
+        return;
+      }
+      this.wrongMaxThreshold = '';
+      this.wrongMinThreshold = '';
+      this.wrongThresholds = false;
+
+      this.updateRoom({
+        name: this.roomName,
+        threshold_on: min,
+        threshold_off: max,
+        enabled: this.roomEnabled,
+      }).catch((error) => {
+        if (error.response !== undefined && error.response.status === 401) {
+          this.$store.commit('setToken', '');
+          this.$router.push({ name: 'Login' });
+        }
+      });
+    },
   },
   props: {
     roomName: {
@@ -69,11 +102,11 @@ export default {
       required: true,
     },
     maxThreshold: {
-      type: Number,
+      type: String,
       required: true,
     },
     minThreshold: {
-      type: Number,
+      type: String,
       required: true,
     },
     enabled: {
@@ -91,6 +124,9 @@ export default {
       roomEnabled: this.enabled,
       roomMaxThreshold: this.maxThreshold,
       roomMinThreshold: this.minThreshold,
+      wrongMaxThreshold: '',
+      wrongMinThreshold: '',
+      wrongThresholds: false,
     };
   },
 };
@@ -107,6 +143,16 @@ export default {
     width: auto;
     display: inline;
     border: 0px;
+  }
+
+  .temperature-wrong {
+    border: 1px solid red;
+    border-radius: 15px;
+    color: red;
+  }
+
+  .thresholds-wrong {
+    color: red;
   }
 
   /* The switch - the box around the slider */
