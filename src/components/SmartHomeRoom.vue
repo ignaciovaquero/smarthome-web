@@ -51,6 +51,10 @@ export default {
   methods: {
     ...mapActions(['updateRoom']),
     sendRoomParameters() {
+      this.wrongMaxThreshold = '';
+      this.wrongMinThreshold = '';
+      this.wrongThresholds = false;
+
       this.roomMinThreshold = this.roomMinThreshold.replaceAll(',', '.');
       this.roomMaxThreshold = this.roomMaxThreshold.replaceAll(',', '.');
 
@@ -69,7 +73,7 @@ export default {
         this.wrongMaxThreshold = wrongTemperature;
       }
 
-      if (this.roomMaxThreshold < this.roomMinThreshold) {
+      if (max < min) {
         mustReturn = true;
         this.wrongMaxThreshold = wrongTemperature;
         this.wrongMinThreshold = wrongTemperature;
@@ -79,9 +83,6 @@ export default {
       if (mustReturn) {
         return;
       }
-      this.wrongMaxThreshold = '';
-      this.wrongMinThreshold = '';
-      this.wrongThresholds = false;
 
       this.updateRoom({
         name: this.roomName,
