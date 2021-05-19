@@ -1,4 +1,4 @@
-name: Deploy SmartHome web
+name: Destroy SmartHome web
 on: [workflow_dispatch]
 jobs:
   destroy:
