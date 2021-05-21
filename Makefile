@@ -1,6 +1,6 @@
 .PHONY: build clean init deploy remove plan dev
 
-SMARTHOME_BASE_URL ?= https://yqzj7ilmwg.execute-api.eu-west-3.amazonaws.com/dev
+SMARTHOME_BASE_URL ?= https://l0q0rm6p2d.execute-api.eu-west-3.amazonaws.com/dev
 
 build:
 	npm install
