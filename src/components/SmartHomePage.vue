@@ -8,10 +8,10 @@
       <carousel class="carousel" v-if="rooms.length" :perPage="1">
         <slide class="slide" v-for="(room, index) in rooms" :key="index">
           <SmartHomeRoom
-            :roomName="room.Room.Value"
-            :maxThreshold="room.ThresholdOff.Value"
-            :minThreshold="room.ThresholdOn.Value"
-            :enabled="room.Enabled.Value"
+            :roomName="room.name"
+            :maxThreshold="room.threshold_off"
+            :minThreshold="room.threshold_on"
+            :enabled="room.enabled"
           />
         </slide>
       </carousel>
