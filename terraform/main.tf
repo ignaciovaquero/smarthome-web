@@ -113,7 +113,6 @@ module "acm" {
 
   domain_name               = "${var.domain.subdomain}.${var.domain.name}"
   zone_id                   = data.aws_route53_zone.this.id
-  subject_alternative_names = ["${var.domain.subdomain}.${var.domain.name}"]
 }
 
 #############
