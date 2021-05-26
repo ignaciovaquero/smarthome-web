@@ -103,11 +103,11 @@ export default {
       required: true,
     },
     maxThreshold: {
-      type: String,
+      type: Number,
       required: true,
     },
     minThreshold: {
-      type: String,
+      type: Number,
       required: true,
     },
     enabled: {
@@ -123,8 +123,8 @@ export default {
   data() {
     return {
       roomEnabled: this.enabled,
-      roomMaxThreshold: this.maxThreshold,
-      roomMinThreshold: this.minThreshold,
+      roomMaxThreshold: `${this.maxThreshold}`,
+      roomMinThreshold: `${this.minThreshold}`,
       wrongMaxThreshold: '',
       wrongMinThreshold: '',
       wrongThresholds: false,
