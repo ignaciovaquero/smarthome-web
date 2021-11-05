@@ -18,7 +18,7 @@ variable "domain" {
   })
 
   default = {
-    name = "ivaquero.es"
+    name = "ignaciovaquero.com"
     subdomain = "smarthome"
   }
 }
