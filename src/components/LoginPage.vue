@@ -5,7 +5,7 @@
     </div>
     <div class="w3-content w3-card login-form">
       <h1 class="title w3-padding-large">{{title}}</h1>
-      <form class="w3-container">
+      <form class="w3-container" @submit=login>
         <input
           class="input-username w3-input"
           type="text"
@@ -20,8 +20,8 @@
         />
         <button
           type="submit"
+          value="Submit"
           class="login-button w3-button w3-hover-shadow"
-          @click="login()"
         >
           Login
         </button>
@@ -47,7 +47,8 @@ export default {
     };
   },
   methods: {
-    login() {
+    login(event) {
+      event.preventDefault();
       this.$store.dispatch('login', { username: this.user, password: this.pass })
         .then(() => this.$router.push({ name: 'SmartHome' }))
         .catch((error) => {
