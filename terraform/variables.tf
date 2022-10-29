@@ -7,23 +7,23 @@ variable "access_key" {
 }
 
 variable "bucket_name" {
-  type = string
+  type    = string
   default = "igvaquero-smarthome-web-content"
 }
 
 variable "domain" {
   type = object({
-    name = string
+    name      = string
     subdomain = string
   })
 
   default = {
-    name = "ignaciovaquero.com"
+    name      = "ignaciovaquero.es"
     subdomain = "smarthome"
   }
 }
 
 variable "upload_directory" {
-  type = string
+  type    = string
   default = "../dist/"
 }

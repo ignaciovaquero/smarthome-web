@@ -2,19 +2,19 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 3.28"
+      version = "~> 4.37"
     }
   }
 
   backend "s3" {
     bucket = "igvaquero-terraform-state"
-    key = "smarthome-web/state"
+    key    = "smarthome-web/state"
     region = "eu-west-1"
   }
 }
 
 provider "aws" {
-  region = "us-east-1" # CloudFront expects ACM resources in us-east-1 region only
+  region     = "us-east-1" # CloudFront expects ACM resources in us-east-1 region only
   access_key = var.access_key
   secret_key = var.secret_key
   # Make it faster by skipping something
@@ -46,10 +46,10 @@ module "cdn" {
 
   aliases = ["${var.domain.subdomain}.${var.domain.name}"]
 
-  comment             = "SmartHome Web App"
-  enabled             = true
-  is_ipv6_enabled     = false
-  price_class         = "PriceClass_100"
+  comment         = "SmartHome Web App"
+  enabled         = true
+  is_ipv6_enabled = false
+  price_class     = "PriceClass_100"
 
   create_origin_access_identity = true
 
@@ -111,8 +111,8 @@ module "acm" {
   source  = "terraform-aws-modules/acm/aws"
   version = "~> 3.0"
 
-  domain_name               = "${var.domain.subdomain}.${var.domain.name}"
-  zone_id                   = data.aws_route53_zone.this.id
+  domain_name = "${var.domain.subdomain}.${var.domain.name}"
+  zone_id     = data.aws_route53_zone.this.id
 }
 
 #############
@@ -182,10 +182,10 @@ resource "random_pet" "this" {
 resource "aws_s3_bucket_object" "smarthome_content" {
   for_each = fileset(var.upload_directory, "**/*.*")
 
-  bucket = module.s3_one.s3_bucket_id
-  key = replace(each.value, var.upload_directory, "")
-  source = "${var.upload_directory}${each.value}"
-  etag = filemd5("${var.upload_directory}${each.value}")
+  bucket       = module.s3_one.s3_bucket_id
+  key          = replace(each.value, var.upload_directory, "")
+  source       = "${var.upload_directory}${each.value}"
+  etag         = filemd5("${var.upload_directory}${each.value}")
   content_type = lookup(local.mime_types, split(".", each.value)[length(split(".", each.value)) - 1])
 }
 
