@@ -42,7 +42,8 @@ locals {
 }
 
 module "cdn" {
-  source = "terraform-aws-modules/cloudfront/aws"
+  source  = "terraform-aws-modules/cloudfront/aws"
+  version = "~> 3.0.1"
 
   aliases = ["${var.domain.subdomain}.${var.domain.name}"]
 
@@ -109,7 +110,7 @@ data "aws_route53_zone" "this" {
 
 module "acm" {
   source  = "terraform-aws-modules/acm/aws"
-  version = "~> 3.0"
+  version = "~> 4.1.0"
 
   domain_name = "${var.domain.subdomain}.${var.domain.name}"
   zone_id     = data.aws_route53_zone.this.id
@@ -123,7 +124,7 @@ data "aws_canonical_user_id" "current" {}
 
 module "s3_one" {
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "~> 2.0"
+  version = "~> 3.5.0"
 
   bucket        = var.bucket_name
   force_destroy = true
@@ -135,7 +136,7 @@ module "s3_one" {
 
 module "records" {
   source  = "terraform-aws-modules/route53/aws//modules/records"
-  version = "~> 2.0"
+  version = "~> 2.10.1"
 
   zone_id = data.aws_route53_zone.this.zone_id
 
